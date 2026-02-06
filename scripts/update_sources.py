@@ -166,8 +166,8 @@ class IPTVUpdater:
                 continue
                 
             if any(good_keyword in name for good_keyword in [
-                'cctv', '央视', '卫视', '湖南', '浙江', '江苏', '北京', '上海', '广东',
-                'bbc', 'cnn', 'disney', 'discovery'
+                'cctv', '央视', '卫视', '湖南', '浙江', '江苏', '北京', '上海', '广东', 
+                'viutv', '无线新闻', 'HOY', 'NOW', '香港', '凤凰', '翡翠', '明珠', 'tvb', 'RTHK'
             ]):
                 quality_channels.append(channel)
                 continue
@@ -183,7 +183,7 @@ class IPTVUpdater:
         if any(keyword in name_lower for keyword in cctv_keywords):
             return 'cctv'
         
-        satellite_keywords = ['卫视', 'tvb', '凤凰', '湖南', '浙江', '江苏', '北京']
+        satellite_keywords = ['卫视', '凤凰', '湖南', '浙江', '江苏', '北京']
         if any(keyword in name_lower for keyword in satellite_keywords):
             return 'satellite'
         
@@ -191,9 +191,9 @@ class IPTVUpdater:
         if any(keyword in name_lower for keyword in local_keywords):
             return 'local'
         
-        international_keywords = ['bbc', 'cnn', 'nhk', 'fox', 'hbo', 'disney']
+        international_keywords = ['tvb', 'viutv', '无线新闻', 'HOY', 'NOW', '凤凰', '翡翠', '明珠', 'RTHK']
         if any(keyword in name_lower for keyword in international_keywords):
-            return 'international'
+            return 'hongkong'
         
         return 'other'
     
