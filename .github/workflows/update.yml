@@ -26,8 +26,8 @@ jobs:
     - name: Update live sources
       run: python scripts/update_sources.py
       
-    - name: Update VOD sources
-      run: python scripts/update_vod_sources.py
+    # - name: Update VOD sources
+    #   run: python scripts/update_vod_sources.py
       
     - name: Commit and push changes
       run: |
