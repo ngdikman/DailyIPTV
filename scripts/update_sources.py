@@ -14,12 +14,14 @@ class IPTVUpdater:
     def __init__(self):
         self.session = requests.Session()
         self.session.headers.update({
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            'User-Agent': 'okhttp/1.3.14'
         })
         self.all_channels = []
         self.log_messages = []
-        self.repository_owner = os.environ.get('GITHUB_REPOSITORY_OWNER', 'mymsnn')
+        self.repository_owner = os.environ.get('GITHUB_REPOSITORY_OWNER', 'ngdikman')
         self.repository_name = os.environ.get('GITHUB_REPOSITORY', 'DailyIPTV').split('/')[-1]
+
+        self.blocked_groups = ['直播中国', '冰茶公告', '纪录频道', '春晚频道']
         
     def log(self, message):
         timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -57,6 +59,12 @@ class IPTVUpdater:
             self.log(f"获取异常: {e}")
             return None
     
+    def is_blocked_group(self, group_title):
+        if not group_title:
+            return False
+        group_lower = group_title.lower()
+        return any(keyword in group_lower for keyword in self.blocked_groups)
+
     def parse_m3u(self, content, source_url):
         channels = []
         current_channel = {}
@@ -70,10 +78,14 @@ class IPTVUpdater:
             if line.startswith('#EXTINF'):
                 current_channel = {'raw_extinf': line}
                 name_match = re.search(r',(?P<name>.*)$', line)
-                if name_match:
-                    current_channel['name'] = name_match.group('name').strip()
-                else:
-                    current_channel['name'] = f"Unknown_{i}"
+                group_match = re.search(r'group-title="([^"]+)"', line)
+
+                current_channel['name'] = name_match.group('name').strip() if name_match else f"Unknown_{i}"
+                current_channel['group'] = group_match.group(1).strip() if group_match else ''
+
+                if self.is_blocked_group(current_channel['group']):
+                    current_channel = {}
+                    continue
                     
             elif line.startswith(('http://', 'https://', 'rtsp://', 'rtmp://')):
                 if current_channel:
@@ -162,7 +174,7 @@ class IPTVUpdater:
             url = channel['url']
             name = channel['name'].lower()
             
-            if any(bad_name in name for bad_name in ['test', 'example', 'demo', '无效', '测试']):
+            if any(bad_name in name for bad_name in ['test', 'example', 'demo', '无效', '测试', '春晚']):
                 continue
                 
             if any(good_keyword in name for good_keyword in [
@@ -201,7 +213,6 @@ class IPTVUpdater:
         header = f"""#EXTM3U
 #EXTENC: UTF-8
 # Generated: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')}
-# Updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 # Title: {title}
 # Total Channels: {len(channels)}
 # For personal testing only.
