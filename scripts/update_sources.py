@@ -191,8 +191,8 @@ class IPTVUpdater:
         if any(keyword in name_lower for keyword in local_keywords):
             return 'local'
         
-        international_keywords = ['tvb', 'viutv', '无线新闻', 'HOY', 'NOW', '凤凰', '翡翠', '明珠', 'RTHK']
-        if any(keyword in name_lower for keyword in international_keywords):
+        hongkong_keywords = ['tvb', 'viutv', '无线新闻', 'HOY', 'NOW', '凤凰', '翡翠', '明珠', 'RTHK']
+        if any(keyword in name_lower for keyword in hongkong_keywords):
             return 'hongkong'
         
         return 'other'
@@ -234,8 +234,8 @@ class IPTVUpdater:
 ### 📺 分类频道
 - **央视**: [{base_url}/cctv.m3u]({base_url}/cctv.m3u) ({stats['categories']['cctv']}个)
 - **卫视**: [{base_url}/satellite.m3u]({base_url}/satellite.m3u) ({stats['categories']['satellite']}个)
-- **地方台**: [{base_url}/local.m3u]({base_url}/local.m3u) ({stats['categories']['local']}个)
-- **国际**: [{base_url}/international.m3u]({base_url}/international.m3u) ({stats['categories']['international']}个)
+- **地方**: [{base_url}/local.m3u]({base_url}/local.m3u) ({stats['categories']['local']}个)
+- **港台**: [{base_url}/hongkong.m3u]({base_url}/hongkong.m3u) ({stats['categories']['hongkong']}个)
 
 ### 📊 统计信息
 - 总频道: {stats['total_channels']} 个
@@ -315,7 +315,7 @@ class IPTVUpdater:
         
         self.log(f"验证完成: {len(valid_channels)}/{len(quality_channels)}")
         
-        categorized_channels = {'cctv': [], 'satellite': [], 'local': [], 'international': [], 'other': []}
+        categorized_channels = {'cctv': [], 'satellite': [], 'local': [], 'hongkong': [], 'other': []}
         for channel in valid_channels:
             category = self.categorize_channel(channel['name'])
             categorized_channels[category].append(channel)
