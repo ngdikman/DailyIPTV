@@ -1,10 +1,8 @@
 {
     "sources": [
-        "https://m3u.ibert.me/fmml_ipv6.m3u",
-        "https://live.zbds.org/tv/iptv6.m3u",
         "https://raw.githubusercontent.com/suxuang/myIPTV/refs/heads/main/ipv4.m3u",
-        "https://zbds.org/tv/iptv4.m3u",
-         "https://raw.githubusercontent.com/BurningC4/Chinese-IPTV/master/TV-IPV4.m3u"
+        "https://live.zbds.top/tv/iptv4.m3u"，
+        "https://bc.188766.xyz/?url=https://live.iill.top&mima=bingcha1130"
     ],
     "backup_sources": [
         "https://gitlab.com/iptv-org/iptv/-/raw/master/index.m3u"
